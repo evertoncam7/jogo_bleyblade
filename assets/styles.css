@@ -1,0 +1,138 @@
+
+*{
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+.conteiner{
+    width: 100vw;
+    height: 100vh;
+
+    
+
+}
+
+.palco{
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    border: 4px solid #111;
+    background: #fff;
+
+    /* overflow: hidden; */
+}
+
+.containerBley{
+    position: relative;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bleyblade{
+    position: absolute;
+    top: 35px;
+    left: 51px;
+    width: 90px;
+    height: 90px;
+    border-radius: 50px;
+    /* border: 1px solid #111; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.cantosBlade{
+    position: absolute;
+    width: 125px;
+    height: 125px;
+    /* border: 1px solid #111; */
+    background-image: url("imagens/b2.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.cantosBladeActive{
+    position: absolute;
+    width: 125px;
+    height: 125px;
+    /* border: 1px solid green; */
+    background-image: url("imagens/b3.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+   
+}
+
+.cantosBlade:nth-child(1){
+    transform: rotate(45deg);
+}
+
+.cantosBlade:nth-child(2){
+    transform: rotate(45deg);
+    
+}
+
+.cantosBladeActive:nth-child(1){
+    transform: rotate(45deg);
+    /* background: greenyellow; */
+    z-index: 90;
+}
+
+.cantosBladeActive:nth-child(2){
+    transform: rotate(45deg);
+}
+
+.teste{
+    width: 400px;
+    height: 200px;
+    border: 1px solid #111;
+    border-width: 10px 50px 90px;
+    border-radius: 50px 50px 50px, 50px 50px ;
+    margin: 20px;
+}
+
+
+
+.moon { 
+    width: 100px; 
+    height: 100px; 
+    border-radius: 50%; 
+    box-shadow: 15px 15px 0 0 #F39C12; 
+  } 
+
+
+  .papel{
+
+    position:relative;
+    width: 400px;
+    height: 400px;
+    background: #F39C12;
+
+    margin: 20px;
+
+  }
+
+  .desenho{
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    border-radius: 1px;
+    background: #111;
+  }
+
+  .colision{
+    animation-name: animaColidion;
+    animation-duration: 1s;
+  }
+
+  @keyframes animaColidion {
+    0%{
+        background: red;
+    }100%{
+        background: #fff;
+    }
+  } 

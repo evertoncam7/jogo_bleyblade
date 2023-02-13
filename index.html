@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="palco">
+
+           
+
+        </div>
+
+      
+
+
+
+    </div>
+    
+</body>
+
+<script>
+
+    const palco = document.querySelector(".palco");
+
+
+    function c(cl, el = "div"){
+        const e = document.createElement(el);
+        e.setAttribute("class", cl);
+        return e;
+    }
+
+    function bleyblade(tp, lf, act){
+
+        const state = {
+            top:tp,
+            left:lf,
+            rotacao:0.2
+
+        }
+        
+        const b = c("bleyblade");
+        const cby = c("containerBley");
+        b.appendChild(cby);
+
+        b.style.top = tp+"px";
+        b.style.left = lf+"px";
+
+        const active = act ? 'cantosBladeActive':'cantosBlade';
+
+        const cb1 = c(active);
+        const cb2 = c(active);
+        const cb3 = c(active);
+        const cb4 = c(active);
+
+        cby.appendChild(cb1);
+        cby.appendChild(cb2);
+        cby.appendChild(cb3);
+        cby.appendChild(cb4);
+
+
+        function rodar(){
+
+            let tempo = 0;
+
+            const t = setInterval(() => {
+
+                b.style.transform = "rotate("+tempo+"deg)";
+                tempo++
+                
+            }, state.rotacao);
+
+        
+        }
+
+        return {
+            b,
+            state,
+            rodar
+        };
+
+    }
+
+    const b1 = bleyblade(50, 50, 'active');
+    b1.rodar();
+    const b2 = bleyblade(palco.getBoundingClientRect().height - 150, palco.getBoundingClientRect().width - 150);
+    b2.rodar();
+    
+
+    palco.appendChild(b1.b);
+    palco.appendChild(b2.b);
+
+   
+    function gravidadeBley(b){
+
+        // palco
+        const p = palco.getBoundingClientRect();
+        w = p.width;
+        h = p.height;
+
+        centroW = w/2;
+        centroH = h/2;
+
+        // bleyBlade
+        const bb = b.b.getBoundingClientRect();
+        let valY = (b.state.top + bb.width/2);
+        let valX = (b.state.left + bb.height/2);
+
+        // const positionBleyde = b.state.top < centroH 
+
+        if (valX <= centroW) {
+            b.state.left++;
+        }
+
+        if (valX >= centroW) {
+            b.state.left--;
+        }
+
+        if (valY < centroH) {
+            b.state.top++;
+        }
+
+        if (valY > centroH) {
+            b.state.top--;
+        }
+
+        b.b.style.top = b.state.top+"px";
+        b.b.style.left = b.state.left+"px";
+
+        // console.log(bb);
+
+    }
+
+
+    function distancia(a, b){
+        return Math.sqrt((b.x - a.x)**2 + (b.y - a.y)**2);
+    }
+
+    
+
+    function colisionBley(arrayBley){
+
+        for (let index = 0; index < arrayBley.length; index++) {
+
+                let bX = arrayBley[index].b.getBoundingClientRect().x;
+                const bY = arrayBley[index].b.getBoundingClientRect().y;
+
+                for (let index2 = 0; index2 < arrayBley.length; index2++) {
+
+                    const b2X = arrayBley[index2].b.getBoundingClientRect().x;
+                    const b2Y = arrayBley[index2].b.getBoundingClientRect().y;
+
+                    if (arrayBley[index] != arrayBley[index2]) {
+
+                        if (distancia({x:bX, y:bY}, {x:b2X, y:b2Y}) <= 125) {
+
+                            palco.classList.add("colision");
+                            const tc = setTimeout(() => {
+                                palco.classList.remove("colision");
+                            }, 500)
+
+                            if (bX < b2X) {
+                                arrayBley[index].state.left = arrayBley[index].state.left - Math.floor(Math.random(10)*150);
+                                arrayBley[index2].state.left = arrayBley[index2].state.left + Math.floor(Math.random(10)*150);
+                                update();
+                            }
+
+                            if (bY < b2Y) {
+                                arrayBley[index].state.top = arrayBley[index].state.top - Math.floor(Math.random(10)*150);
+                                arrayBley[index2].state.top = arrayBley[index].state.top + Math.floor(Math.random(10)*150);
+                                update();
+                            }
+
+
+                            // if (bX > b2X) {
+                            //     arrayBley[index].state.left = arrayBley[index].state.left + Math.floor(Math.random(10)*100);
+                            //     arrayBley[index2].state.left = arrayBley[index2].state.left - Math.floor(Math.random(10)*100);
+                            //     update();
+                            // }
+
+                            // if (bY > b2Y) {
+                            //     arrayBley[index].state.top = arrayBley[index].state.top + Math.floor(Math.random(10)*100);
+                            //     arrayBley[index2].state.top = arrayBley[index].state.top - Math.floor(Math.random(10)*100);
+                            //     update();
+                            // }
+
+                            console.log('Colidiu!!!...');
+
+                        }
+                        
+                    }
+
+                    
+
+                    if ((bX + 120) > palco.getBoundingClientRect().width) {
+
+                        // arrayBley[index2].state.left = 200;
+
+                        palco.classList.add("colision");
+                            const tc = setTimeout(() => {
+                                palco.classList.remove("colision");
+                            }, 500)
+
+                        console.log('colidiu na lateral direita b1...');
+                    }
+
+                    if (bX < 0) {
+
+                        // arrayBley[index2].state.left = 200;
+
+                        palco.classList.add("colision");
+                            const tc = setTimeout(() => {
+                                palco.classList.remove("colision");
+                            }, 500)
+
+                        console.log('colidiu na lateral esquerda...');
+                    }
+
+                    if (bY < 0) {
+
+                        // arrayBley[index2].state.left = 200;
+
+                        palco.classList.add("colision");
+                            const tc = setTimeout(() => {
+                                palco.classList.remove("colision");
+                            }, 500)
+
+                        console.log('colidiu na lateral superior...');
+                    }
+
+                    if (bY > palco.getBoundingClientRect().height) {
+
+                        // arrayBley[index2].state.left = 200;
+
+                        palco.classList.add("colision");
+                            const tc = setTimeout(() => {
+                                palco.classList.remove("colision");
+                            }, 500)
+
+                        console.log('colidiu na lateral inferior...');
+                    }
+
+
+
+                    if ((b2X + 120) > palco.getBoundingClientRect().width) {
+
+                        // arrayBley[index2].state.left = 200;
+
+                        palco.classList.add("colision");
+                            const tc = setTimeout(() => {
+                                palco.classList.remove("colision");
+                            }, 500)
+
+                        console.log('colidiu na lateral direita...');
+                    }
+
+                    if (b2X < 0) {
+
+                        // arrayBley[index2].state.left = 200;
+
+                        palco.classList.add("colision");
+                            const tc = setTimeout(() => {
+                                palco.classList.remove("colision");
+                            }, 500)
+
+                        console.log('colidiu na lateral esquerda...');
+                    }
+
+                    if (b2Y < 0) {
+
+                        // arrayBley[index2].state.left = 200;
+
+                        palco.classList.add("colision");
+                            const tc = setTimeout(() => {
+                                palco.classList.remove("colision");
+                            }, 500)
+
+                        console.log('colidiu na lateral superior...');
+                    }
+
+                    if (b2Y > palco.getBoundingClientRect().height) {
+
+                        // arrayBley[index2].state.left = 200;
+
+                        palco.classList.add("colision");
+                            const tc = setTimeout(() => {
+                                palco.classList.remove("colision");
+                            }, 500)
+
+                        console.log('colidiu na lateral inferior...');
+                    }
+
+                    
+                    
+                }
+            }
+
+
+        
+    }
+
+
+    
+    // console.log(Math.floor(Math.random(10)*100));
+
+
+
+    function zoom(z){
+        const p = document.querySelector(".palco");
+        const arrBley = document.querySelectorAll(".bleyblade");
+
+
+        p.style.transform = "scale("+z+")";
+
+        for (let index = 0; index < arrBley.length; index++) {
+            
+            arrBley[index].style.transform = "scale("+z+")";
+            
+        }
+    }
+
+    // zoom(0.5);
+
+
+    function update(){
+
+        gravidadeBley(b1);
+        gravidadeBley(b2);
+
+        colisionBley([b1, b2]);
+
+    
+
+    }
+
+
+    function render(){
+
+
+        update();
+
+
+        // console.log('animando...');
+
+        window.requestAnimationFrame(render);
+    }
+
+    render();
+
+
+    function start(){
+
+        rodar();
+
+
+
+    }
+
+    
+    
+
+
+
+</script>
+
+
+
+
+</html>
